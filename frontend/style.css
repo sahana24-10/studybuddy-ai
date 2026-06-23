@@ -1,0 +1,585 @@
+/* ==========================================================================
+   🎯 CORE THEME INITIALIZATION & MATRIX VARIABLES
+   ========================================================================== */
+:root {
+    --bg-main: #130f1a;         /* Deep Velvet Night Void */
+    --bg-surface: #1d1826;      /* Dark Lilac Panel Card Base */
+    --bg-surface-hover: #282236;/* Focused Hover Highlight state */
+    
+    --accent-pastel: #ff9ebb;   /* Cozy Soft Pink Highlights */
+    --accent-yellow: #ffe375;   /* Focus Energy Metric Yellow */
+    --accent-green: #a3e635;    /* Completion Index Green */
+    
+    --text-main: #e0dbec;       /* High Readability Velvet White */
+    --text-muted: #9a92ab;      /* Muted Sidebar Labels & Subtitles */
+    --border-line: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* ==========================================================================
+   📁 MAIN APPLICATION WORKSPACE GRID SYSTEM
+   ========================================================================== */
+.main-workspace {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* --- Left Sidebar Assembly Panel --- */
+.sidebar {
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 16px;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 24px 8px;
+    border-bottom: 1px solid var(--border-line);
+}
+
+.brand-icon {
+    color: var(--accent-pastel);
+    width: 24px;
+    height: 24px;
+}
+
+.sidebar-brand h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.sidebar-brand .accent {
+    color: var(--accent-pastel);
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 24px;
+    flex-grow: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.menu-item i {
+    width: 18px;
+    height: 18px;
+}
+
+.menu-item:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-main);
+}
+
+.menu-item.active {
+    background-color: var(--bg-surface-hover);
+    color: var(--accent-pastel);
+    font-weight: 600;
+}
+
+.logout-link:hover {
+    color: #ef4444 !important;
+}
+
+/* ==========================================================================
+   🖼️ CONTENT VIEWPORT AREA FRAMEWORKS
+   ========================================================================== */
+.content-viewport {
+    padding: 40px;
+    overflow-y: auto;
+    height: 100vh;
+}
+
+.view-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.section-header {
+    margin-bottom: 32px;
+}
+
+.view-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.view-subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* ==========================================================================
+   📊 METRICS AND DATA GRID ASSEMBLIES (Unified Layout Cards)
+   ========================================================================== */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.metric-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.metric-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.metric-number {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-top: 10px;
+}
+
+/* ==========================================================================
+   📈 CRITICAL CHART PROTECTION WRAPPERS (Prevents Endless Blowing Up)
+   ========================================================================== */
+.charts-layout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 24px;
+    width: 100%;
+}
+
+.chart-card-wrapper {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    max-height: 380px;  /* Firm safety stop threshold */
+    overflow: hidden;
+}
+
+.chart-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 20px;
+}
+
+/* Strict Canvas constraint to tell ChartJS exactly how big to stay */
+.chart-card-wrapper canvas {
+    max-width: 100% !important;
+    max-height: 260px !important; 
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   📋 TASK MATRIX LAYOUT MODULES
+   ========================================================================== */
+.tasks-container-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.task-input-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.task-text-field {
+    flex-grow: 1;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-line);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text-main);
+    font-size: 14px;
+    outline: none;
+}
+
+.task-text-field:focus {
+    border-color: var(--accent-pastel);
+}
+
+.task-select-dropdown {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-line);
+    border-radius: 8px;
+    padding: 0 16px;
+    color: var(--text-main);
+    font-size: 14px;
+    outline: none;
+}
+
+.task-submit-btn {
+    background-color: var(--accent-pastel);
+    color: var(--bg-main);
+    border: none;
+    border-radius: 8px;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.task-submit-btn:hover {
+    opacity: 0.9;
+}
+
+.task-list-deck {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-line);
+    padding: 14px 16px;
+    border-radius: 10px;
+}
+
+.task-item.priority-high { border-left: 4px solid #f87171; }
+.task-item.priority-medium { border-left: 4px solid var(--accent-yellow); }
+.task-item.priority-low { border-left: 4px solid #60a5fa; }
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.task-left-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.task-checkbox {
+    accent-color: var(--accent-pastel);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.task-delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.task-delete-btn:hover {
+    color: #ef4444;
+}
+
+/* ==========================================================================
+   📝 NOTES VAULT MANAGEMENT COMPONENT SYSTEM
+   ========================================================================== */
+.notes-workspace-split {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.note-entry-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.panel-sub-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+}
+
+.note-input-field, .note-textarea-field {
+    width: 100%;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-line);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--text-main);
+    font-size: 14px;
+    outline: none;
+}
+
+.note-textarea-field {
+    resize: none;
+}
+
+.form-attachment-preview {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 140px;
+    border: 1px solid var(--border-line);
+}
+
+.form-attachment-preview img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.clear-img-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(239, 68, 68, 0.9);
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.notes-explorer-pane {
+    display: flex;
+    flex-direction: column;
+}
+
+.notes-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.note-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.note-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-card-title {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.note-card-content {
+    font-size: 13px;
+    color: #c9c1db;
+    white-space: pre-wrap;
+}
+
+.note-card-attachment {
+    width: 100%;
+    border-radius: 6px;
+    max-height: 120px;
+    object-fit: cover;
+    margin-top: 4px;
+}
+
+.note-tag-badge {
+    align-self: flex-start;
+    background-color: var(--bg-surface-hover);
+    color: var(--accent-pastel);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   ⏱️ COZY TIMER CONTROLS SETUP
+   ========================================================================== */
+.timer-display-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 24px;
+    padding: 60px;
+    text-align: center;
+    max-width: 500px;
+    margin: 40px auto 0 auto;
+}
+
+.timer-state-tag {
+    background-color: var(--bg-surface-hover);
+    color: var(--accent-yellow);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.timer-clock {
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    margin: 24px 0;
+    color: var(--text-main);
+}
+
+.timer-control-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.pomo-control-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pomo-control-btn.primary { background-color: var(--accent-pastel); color: var(--bg-main); }
+.pomo-control-btn.secondary { background-color: var(--bg-surface-hover); color: var(--text-main); }
+.pomo-control-btn.danger { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+.pomo-control-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.timer-footer-stats {
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   ✨ LIVE AI ASSISTANT CONSOLE SUITE
+   ========================================================================== */
+.ai-chat-card-panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 180px);
+}
+
+.chat-viewport-stream {
+    flex-grow: 1;
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.msg-bubble {
+    max-width: 75%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.msg-bubble.system-ai {
+    background-color: var(--bg-main);
+    border-left: 3px solid var(--accent-pastel);
+    align-self: flex-start;
+}
+
+.msg-bubble.user-client {
+    background-color: var(--bg-surface-hover);
+    border-right: 3px solid var(--accent-yellow);
+    align-self: flex-end;
+}
+
+.msg-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.chat-entry-form-dock {
+    display: flex;
+    padding: 16px;
+    background-color: var(--bg-main);
+    border-top: 1px solid var(--border-line);
+    border-radius: 0 0 16px 16px;
+    gap: 12px;
+}
+
+.chat-input-field {
+    flex-grow: 1;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-line);
+    border-radius: 8px;
+    padding: 14px;
+    color: var(--text-main);
+    font-size: 14px;
+    outline: none;
+}
+
+.chat-send-btn {
+    background-color: var(--accent-pastel);
+    color: var(--bg-main);
+    border: none;
+    border-radius: 8px;
+    padding: 0 24px;
+    font-weight: 600;
+    cursor: pointer;
+}

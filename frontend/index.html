@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div id="app-container" class="main-workspace">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i data-lucide="sparkles" class="brand-icon"></i>
+                <h2>StudyBuddy <span class="accent">AI</span></h2>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-target="dashboard-page">
+                    <i data-lucide="layout-dashboard"></i> <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" data-target="tasks-page">
+                    <i data-lucide="check-square"></i> <span>Tasks</span>
+                </a>
+                <a href="#" class="menu-item" data-target="notes-page">
+                    <i data-lucide="file-text"></i> <span>Notes</span>
+                </a>
+                <a href="#" class="menu-item" data-target="timer-page">
+                    <i data-lucide="hourglass"></i> <span>Timer</span>
+                </a>
+                <a href="#" class="menu-item" data-target="calendar-page">
+                    <i data-lucide="calendar"></i> <span>Calendar</span>
+                </a>
+                <a href="#" class="menu-item" data-target="analytics-page">
+                    <i data-lucide="bar-chart-2"></i> <span>Analytics</span>
+                </a>
+                <a href="#" class="menu-item" data-target="ai-page">
+                    <i data-lucide="smile"></i> <span>AI Assistant</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="menu-item logout-link">
+                    <i data-lucide="log-out"></i> <span>Sign Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Dynamic Main Content Deck Area -->
+        <main class="content-viewport">
+            
+            <!-- 🏠 Dashboard Section -->
+            <section id="dashboard-page" class="view-section">
+                <div class="section-header">
+                    <h2 class="view-title">Overview Desk</h2>
+                    <p class="view-subtitle">Your workspace is balanced. Here is your baseline index for today.</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">QUESTS OPEN</span>
+                        <div id="dash-tasks-count" class="metric-number">0 Remaining</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">STUDY VELOCITY</span>
+                        <div class="metric-number">0.0 Hours</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">ROUTINE STREAK</span>
+                        <div class="metric-number">0 Days</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">FOCUS SLOTS</span>
+                        <div id="dash-pomo" class="metric-number">0 Completed</div>
+                    </div>
+                </div>
+                <div class="charts-layout-grid" style="margin-top: 24px;">
+                    <div class="chart-card-wrapper">
+                        <h3 class="chart-card-title">Focus Distribution</h3>
+                        <canvas id="dashWeeklyChart"></canvas>
+                    </div>
+                    <div class="chart-card-wrapper">
+                        <h3 class="chart-card-title">Completion Index</h3>
+                        <canvas id="dashTaskChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 📋 Tasks Section -->
+            <section id="tasks-page" class="view-section hidden">
+                <div class="section-header">
+                    <h2 class="view-title">Task Matrix</h2>
+                    <p class="view-subtitle">Manage, categorize, and complete your active priorities.</p>
+                </div>
+                <div class="tasks-container-card">
+                    <form id="task-form" class="task-input-row">
+                        <input type="text" id="task-title-input" placeholder="Add a new high-priority milestone..." required class="task-text-field">
+                        <select id="task-priority" class="task-select-dropdown">
+                            <option value="high">High Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                        <button type="submit" class="task-submit-btn">Add Quest</button>
+                    </form>
+                    <ul id="task-list" class="task-list-deck"></ul>
+                </div>
+            </section>
+
+            <!-- 📝 Notes Section -->
+            <section id="notes-page" class="view-section hidden">
+                <div class="section-header">
+                    <h2 class="view-title">Knowledge Vault</h2>
+                    <p class="view-subtitle">Store your equations, revision summaries, and paste clip notes snippet clips.</p>
+                </div>
+                <div class="notes-workspace-split">
+                    <div id="note-form-container" class="note-entry-card">
+                        <h3 class="panel-sub-title">Draft Note (Ctrl+V inside to paste images)</h3>
+                        <form id="note-form">
+                            <input type="text" id="note-title" placeholder="Topic Title..." required class="note-input-field">
+                            <input type="text" id="note-tag" placeholder="Subject Tag (e.g. Circuits, Physics)..." required class="note-input-field" style="margin-top: 12px;">
+                            <textarea id="note-content" placeholder="Type core points or paste screenshots directly..." required class="note-textarea-field" style="margin-top: 12px; height: 120px;"></textarea>
+                            
+                            <!-- Clipboard Image Preview Container Anchor -->
+                            <div id="form-img-preview-container" class="form-attachment-preview hidden" style="margin-top: 12px;">
+                                <img id="form-img-preview" src="" alt="Clipboard Snippet">
+                                <button type="button" id="clear-pasted-img-btn" class="clear-img-badge">Remove Image</button>
+                            </div>
+
+                            <button type="submit" class="task-submit-btn" style="margin-top: 16px; width: 100%;">Commit to Vault</button>
+                        </form>
+                    </div>
+                    <div class="notes-explorer-pane">
+                        <input type="text" id="note-search-input" placeholder="Search knowledge logs by keyword or tag..." class="note-input-field" style="margin-bottom: 16px;">
+                        <div id="notes-grid-deck" class="notes-grid-layout"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ⏱️ Timer Section -->
+            <section id="timer-page" class="view-section hidden">
+                <div class="section-header">
+                    <h2 class="view-title">Pomodoro Engine</h2>
+                    <p class="view-subtitle">Isolate distractions and complete targeted, locked focus windows.</p>
+                </div>
+                <div class="timer-display-card">
+                    <span id="timer-mode-label" class="timer-state-tag">Focus State</span>
+                    <h1 id="timer-countdown" class="timer-clock">25:00</h1>
+                    <div class="timer-control-row">
+                        <button id="pomo-start-btn" class="pomo-control-btn primary">Start</button>
+                        <button id="pomo-pause-btn" class="pomo-control-btn secondary" disabled>Pause</button>
+                        <button id="pomo-reset-btn" class="pomo-control-btn danger">Reset</button>
+                    </div>
+                    <p id="pomo-session-count" class="timer-footer-stats">0 Sessions logged today</p>
+                </div>
+            </section>
+
+            <!-- 📅 Calendar Section -->
+            <section id="calendar-page" class="view-section hidden">
+                <div class="section-header">
+                    <h2 class="view-title">Study Calendar</h2>
+                    <p class="view-subtitle">Map out your upcoming board prep schedules, assignment targets, and milestones.</p>
+                </div>
+                <div class="charts-layout-grid" style="grid-template-columns: 1.6fr 1fr;">
+                    <div class="chart-card-wrapper">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                            <h3 id="calendar-month-year-label" class="chart-card-title" style="margin:0;">June 2026</h3>
+                            <div style="display:flex; gap:8px;">
+                                <button id="cal-prev-btn" class="task-submit-btn" style="padding:4px 12px;"><i data-lucide="chevron-left"></i></button>
+                                <button id="cal-next-btn" class="task-submit-btn" style="padding:4px 12px;"><i data-lucide="chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; color: #ff9ebb; margin-bottom: 8px;">
+                            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                        </div>
+                        <div id="calendar-days-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center;"></div>
+                    </div>
+                    <div class="chart-card-wrapper" style="display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <h3 class="chart-card-title">Agenda Milestones</h3>
+                            <ul id="calendar-agenda-list" style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></ul>
+                        </div>
+                        <form id="calendar-event-form" style="margin-top:16px; border-top:1px solid rgba(255,255,255,0.05); padding-top:16px;">
+                            <input type="text" id="event-title-input" placeholder="Event/Topic title..." required class="note-input-field">
+                            <input type="date" id="event-date-input" required class="note-input-field" style="margin-top: 8px;">
+                            <button type="submit" class="task-submit-btn" style="margin-top: 8px; width: 100%;">Add to Schedule</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 📊 Analytics Section -->
+            <section id="analytics-page" class="view-section hidden">
+                <div class="section-header">
+                    <h2 class="view-title">Performance Analytics</h2>
+                    <p class="view-subtitle">Deep metric metrics mapping your cognitive focus velocity.</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">TOTAL STUDY TIME</span>
+                        <div style="font-size:24px; font-weight:bold; color:#ff9ebb; margin-top:8px;">17.5 <span style="font-size:14px; color:#9a92ab;">Hours</span></div>
+                        <p style="color:#a3e635; font-size:12px; margin-top:4px;">↑ 12% from last week</p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">POMODORO EFFICIENCY</span>
+                        <div style="font-size:24px; font-weight:bold; color:#ffe375; margin-top:8px;">94 <span style="font-size:14px; color:#9a92ab;">%</span></div>
+                        <p style="color:#9a92ab; font-size:12px; margin-top:4px;">Optimal retention zone</p>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">TASKS VELOCITY</span>
+                        <div style="font-size:24px; font-weight:bold; color:#a3e635; margin-top:8px;">78 <span style="font-size:14px; color:#9a92ab;">%</span></div>
+                        <p style="color:#9a92ab; font-size:12px; margin-top:4px;">Steady completion rate</p>
+                    </div>
+                </div>
+                <div class="charts-layout-grid" style="margin-top: 24px;">
+                    <div class="chart-card-wrapper">
+                        <h3 class="chart-card-title">Subject Focus Allocation</h3>
+                        <canvas id="analyticsSubjectChart"></canvas>
+                    </div>
+                    <div class="chart-card-wrapper">
+                        <h3 class="chart-card-title">Daily Energy Cycles</h3>
+                        <canvas id="analyticsEnergyChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ✨ AI Assistant Section -->
+            <section id="ai-page" class="view-section hidden">
+                <div class="section-header">
+                    <h2 class="view-title">AI Copilot Intelligence</h2>
+                    <p class="view-subtitle">Ask questions, break down engineering systems, or check board exam problems in real-time.</p>
+                </div>
+                <div class="ai-chat-card-panel">
+                    <div id="chat-stream-log" class="chat-viewport-stream">
+                        <div class="msg-bubble system-ai">
+                            <div class="msg-meta">StudyBuddy AI • Just Now</div>
+                            <div class="msg-body">Salutations! I am linked up to your core backend. Throw any circuit diagram rules or physics problems my way!</div>
+                        </div>
+                    </div>
+                    <form id="chat-input-dock" class="chat-entry-form-dock">
+                        <input type="text" id="chat-user-message" placeholder="Ask your copilot anything..." required autocomplete="off" class="chat-input-field">
+                        <button type="submit" class="chat-send-btn">Send Engine</button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
